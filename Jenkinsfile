@@ -9,9 +9,9 @@ pipeline {
 
     stage('Docker login') {
       steps {
-        script {
-          withCredentials([string(credentialsId: 'docker-access-token', variable: 'DOCKER_ACCESS_TOKEN')]) {
-            sh "docker login --username atjb --password-stdin <<< ${DOCKER_ACCESS_TOKEN}"
+        withCredentials([string(credentialsId: 'docker-access-token', variable: 'DOCKER_ACCESS_TOKEN')]) {
+          withEnv(["DOCKER_PASSWORD=${DOCKER_ACCESS_TOKEN}"]) {
+            sh 'docker login --username=atjb --password-stdin <<< "$DOCKER_PASSWORD"'
           }
         }
       }
