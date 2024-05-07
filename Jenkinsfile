@@ -1,5 +1,10 @@
 pipeline {
   agent any
+
+  environment {
+    DOCKER_CREDS = credentials('credentials-id')
+  }
+
   stages {
     stage('Docker build') {
       steps {
@@ -9,11 +14,7 @@ pipeline {
 
     stage('Docker login') {
       steps {
-        withCredentials([string(credentialsId: 'docker-access-token', variable: 'DOCKER_ACCESS_TOKEN')]) {
-          withEnv(["DOCKER_PASSWORD=${DOCKER_ACCESS_TOKEN}"]) {
-            sh 'docker login --username=atjb --password-stdin <<< "$DOCKER_PASSWORD"'
-          }
-        }
+        sh 'echo $DOCKER_CREDS | docker login --username=atjb --password-stdin'
       }
     }
 
