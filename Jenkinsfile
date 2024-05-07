@@ -3,6 +3,7 @@ pipeline {
 
   environment {
     DOCKER_CREDS = credentials('credentials-id')
+    DOCKER_PAT = credentials('docker-pat')
   }
 
   stages {
@@ -14,7 +15,7 @@ pipeline {
 
     stage('Docker login') {
       steps {
-        sh 'echo $DOCKER_CREDS | docker login --username=atjb --password-stdin'
+        sh 'echo $DOCKER_PAT | docker login --username=atjb --password-stdin'
       }
     }
 
